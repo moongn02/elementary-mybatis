@@ -1,4 +1,4 @@
-package cn.moongn.mybatis.test.dao;
+package cn.moongn.mybatis.test;
 
 import cn.moongn.mybatis.binding.MapperProxyFactory;
 import cn.moongn.mybatis.test.dao.IUserDao;
