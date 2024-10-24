@@ -1,4 +1,5 @@
 package cn.moongn.mybatis.test.dao;
 
-public class ISchoolDao {
+public interface ISchoolDao {
+    String querySchoolName(String name);
 }
