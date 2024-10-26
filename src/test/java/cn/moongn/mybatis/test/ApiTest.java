@@ -4,14 +4,18 @@ import cn.moongn.mybatis.binding.MapperProxyFactory;
 import cn.moongn.mybatis.binding.MapperRegistry;
 import cn.moongn.mybatis.session.SqlSession;
 import cn.moongn.mybatis.session.SqlSessionFactory;
+import cn.moongn.mybatis.session.SqlSessionFactoryBuilder;
 import cn.moongn.mybatis.session.defaults.DefaultSqlSessionFactory;
 import cn.moongn.mybatis.test.dao.ISchoolDao;
 import cn.moongn.mybatis.test.dao.IUserDao;
 import com.alibaba.fastjson.JSON;
+import cn.moongn.mybatis.io.Resources;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
@@ -43,7 +47,7 @@ public class ApiTest {
     }*/
 
     //第二章：实现映射器的注册和使用
-    @Test
+    /*@Test
     public void test_MapperProxyFactory1(){
         // 1. 注册 Mapper
         MapperRegistry registry = new MapperRegistry();
@@ -56,5 +60,19 @@ public class ApiTest {
         // 4. 测试验证
         String res = userDao.queryUserName("moongn..");
         logger.info("测试结果：{}", res);
+    }*/
+
+    //第三章：Mapper XML的解析和注册使用
+    @Test
+    public void test_SqlSessionFactory() throws IOException {
+        // 1. 从SqlSessionFactory中获取Session
+        Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        // 2. 获取映射器对象
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+        // 3. 测试验证
+        String res = userDao.queryUserInfoById("10001");
+        logger.info("测试结果：{}",res);
     }
 }

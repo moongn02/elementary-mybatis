@@ -10,6 +10,8 @@ package cn.moongn.mybatis.session;
 
 public interface SqlSession {
 
+    Configuration getConfiguration();
+
     /**
      * Retrieve a single row mapped from the statement key
      * 根据指定的SqlID获取一条记录的封装对象

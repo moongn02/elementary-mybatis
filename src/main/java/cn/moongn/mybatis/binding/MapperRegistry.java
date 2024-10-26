@@ -1,5 +1,6 @@
 package cn.moongn.mybatis.binding;
 
+import cn.moongn.mybatis.session.Configuration;
 import cn.moongn.mybatis.session.SqlSession;
 
 import java.util.*;
@@ -14,6 +15,13 @@ import cn.hutool.core.lang.ClassScanner;
  */
 
 public class MapperRegistry {
+
+    private Configuration configuration;
+
+    public MapperRegistry(Configuration config) {
+        this.configuration = config;
+    }
+
     /**
      * 将已添加的映射器代理加入到 HashMap
      */

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.moongn.mybatis.test.dao.IUserDao">
+	<select id="queryUserInfoById"
+            parameterType="java.lang.Long"
+            resultType="cn.moongn.mybatis.test.po.User">
+        SELECT id, userId, userHead, createTime
+        FROM user
+        WHERE id = #{id}
+    </select>
+</mapper>
