@@ -2,12 +2,16 @@ package cn.moongn.mybatis.test;
 
 import cn.moongn.mybatis.binding.MapperProxyFactory;
 import cn.moongn.mybatis.binding.MapperRegistry;
+import cn.moongn.mybatis.builder.xml.XMLConfigBuilder;
+import cn.moongn.mybatis.session.Configuration;
 import cn.moongn.mybatis.session.SqlSession;
 import cn.moongn.mybatis.session.SqlSessionFactory;
 import cn.moongn.mybatis.session.SqlSessionFactoryBuilder;
+import cn.moongn.mybatis.session.defaults.DefaultSqlSession;
 import cn.moongn.mybatis.session.defaults.DefaultSqlSessionFactory;
 import cn.moongn.mybatis.test.dao.ISchoolDao;
 import cn.moongn.mybatis.test.dao.IUserDao;
+import cn.moongn.mybatis.test.po.User;
 import com.alibaba.fastjson.JSON;
 import cn.moongn.mybatis.io.Resources;
 import org.junit.Test;
@@ -63,7 +67,7 @@ public class ApiTest {
     }*/
 
     //第三章：Mapper XML的解析和注册使用
-    @Test
+    /*@Test
     public void test_SqlSessionFactory() throws IOException {
         // 1. 从SqlSessionFactory中获取Session
         Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
@@ -74,5 +78,37 @@ public class ApiTest {
         // 3. 测试验证
         String res = userDao.queryUserInfoById("10001");
         logger.info("测试结果：{}",res);
+    }*/
+
+    //第四章：数据源的解析、创建和使用
+    @Test
+    public void test_SqlSessionFactory() throws IOException {
+        // 1. 从SqlSessionFactory中获取SqlSession
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        // 2. 获取映射器对象
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+
+        // 3. 测试验证
+        User user = userDao.queryUserInfoById(1L);
+        logger.info("测试结果：{}", JSON.toJSONString(user));
     }
+
+    @Test
+    public void test_selectOne() throws IOException {
+        // 解析 XML
+        Reader reader = Resources.getResourceAsReader("mybatis-config-datasource.xml");
+        XMLConfigBuilder xmlConfigBuilder = new XMLConfigBuilder(reader);
+        Configuration configuration = xmlConfigBuilder.parse();
+
+        // 获取 DefaultSqlSession
+        SqlSession sqlSession = new DefaultSqlSession(configuration);
+
+        // 执行查询：默认是一个集合参数
+        Object[] req = {1L};
+        Object res = sqlSession.selectOne("cn.moongn.mybatis.test.dao.IUserDao.queryUserInfoById", req);
+        logger.info("测试结果：{}", JSON.toJSONString(res));
+    }
+
 }

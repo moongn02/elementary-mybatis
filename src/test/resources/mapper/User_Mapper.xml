@@ -6,7 +6,7 @@
 	<select id="queryUserInfoById"
             parameterType="java.lang.Long"
             resultType="cn.moongn.mybatis.test.po.User">
-        SELECT id, userId, userHead, createTime
+        SELECT id, userId, userHead
         FROM user
         WHERE id = #{id}
     </select>
