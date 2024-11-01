@@ -6,9 +6,18 @@ public class User {
 
     private Long id;
     private String userId;      // 用户ID
+    private String userName;    // 用户名称
     private String userHead;    // 头像
     private Date createTime;    // 创建时间
     private Date updateTime;    // 更新时间
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public Long getId() {
         return id;

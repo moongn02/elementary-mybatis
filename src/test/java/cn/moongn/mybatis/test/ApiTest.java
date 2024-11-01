@@ -3,6 +3,7 @@ package cn.moongn.mybatis.test;
 import cn.moongn.mybatis.binding.MapperProxyFactory;
 import cn.moongn.mybatis.binding.MapperRegistry;
 import cn.moongn.mybatis.builder.xml.XMLConfigBuilder;
+import cn.moongn.mybatis.datasource.pooled.PooledDataSource;
 import cn.moongn.mybatis.session.Configuration;
 import cn.moongn.mybatis.session.SqlSession;
 import cn.moongn.mybatis.session.SqlSessionFactory;
@@ -21,6 +22,8 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 public class ApiTest {
@@ -109,6 +112,40 @@ public class ApiTest {
         Object[] req = {1L};
         Object res = sqlSession.selectOne("cn.moongn.mybatis.test.dao.IUserDao.queryUserInfoById", req);
         logger.info("测试结果：{}", JSON.toJSONString(res));
+    }
+
+    // 第五章：数据源池化技术实现
+    @Test
+    public void testSqlSessionFactory() throws IOException {
+        // 1. 从SqlSessionFactory中获取SqlSession
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+
+        // 2. 获取映射器对象
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+
+        // 3. 测试验证
+        for (int i = 0; i < 50; i++) {
+            User user = userDao.queryUserInfoById(1L);
+            logger.info("测试结果：{}", JSON.toJSONString(user));
+        }
+    }
+
+    @Test
+    public void test_pooled() throws SQLException, InterruptedException {
+        PooledDataSource pooledDataSource = new PooledDataSource();
+        pooledDataSource.setDriver("com.mysql.cj.jdbc.Driver");
+        pooledDataSource.setUrl("jdbc:mysql://127.0.0.1:3309/hdmybatis?useUnicode=true");
+        pooledDataSource.setUsername("root");
+        pooledDataSource.setPassword("123456");
+        // 持续获得链接
+        while (true){
+            Connection connection = pooledDataSource.getConnection();
+            System.out.println(connection);
+            Thread.sleep(1000);
+            // 链接关闭，一直开启的是同一个链接；反之，循环开启的是不同的链接，在活跃链接数量达到上限后，会休眠一段时间，直到有空闲链接
+            connection.close();
+        }
     }
 
 }

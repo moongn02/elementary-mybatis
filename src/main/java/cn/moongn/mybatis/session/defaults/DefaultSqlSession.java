@@ -5,9 +5,6 @@ import cn.moongn.mybatis.mapping.Environment;
 import cn.moongn.mybatis.mapping.MappedStatement;
 import cn.moongn.mybatis.session.Configuration;
 import cn.moongn.mybatis.session.SqlSession;
-import cn.moongn.mybatis.transaction.Transaction;
-import cn.moongn.mybatis.transaction.TransactionFactory;
-
 
 import java.lang.reflect.Method;
 import java.sql.*;
