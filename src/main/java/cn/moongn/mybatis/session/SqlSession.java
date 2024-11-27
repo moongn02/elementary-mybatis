@@ -3,13 +3,18 @@ package cn.moongn.mybatis.session;
 /**
  *
  * @author moongn
- * @description
- * @date 2024/10/24
+ * @description SqlSession 用来执行SQL，获取映射器，管理事务。
+ * @date 2024/11/26
  *
  */
 
 public interface SqlSession {
 
+    /**
+     * Retrieves current configuration
+     * 得到配置
+     * @return Configuration
+     */
     Configuration getConfiguration();
 
     /**

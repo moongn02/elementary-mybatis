@@ -1,30 +1,17 @@
 package cn.moongn.mybatis.test;
 
-import cn.moongn.mybatis.binding.MapperProxyFactory;
-import cn.moongn.mybatis.binding.MapperRegistry;
-import cn.moongn.mybatis.builder.xml.XMLConfigBuilder;
-import cn.moongn.mybatis.datasource.pooled.PooledDataSource;
-import cn.moongn.mybatis.session.Configuration;
+import cn.moongn.mybatis.io.Resources;
 import cn.moongn.mybatis.session.SqlSession;
 import cn.moongn.mybatis.session.SqlSessionFactory;
 import cn.moongn.mybatis.session.SqlSessionFactoryBuilder;
-import cn.moongn.mybatis.session.defaults.DefaultSqlSession;
-import cn.moongn.mybatis.session.defaults.DefaultSqlSessionFactory;
-import cn.moongn.mybatis.test.dao.ISchoolDao;
 import cn.moongn.mybatis.test.dao.IUserDao;
 import cn.moongn.mybatis.test.po.User;
 import com.alibaba.fastjson.JSON;
-import cn.moongn.mybatis.io.Resources;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.Reader;
-import java.lang.reflect.Proxy;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
 
 public class ApiTest {
     private Logger logger = LoggerFactory.getLogger(ApiTest.class);
@@ -84,7 +71,7 @@ public class ApiTest {
     }*/
 
     //第四章：数据源的解析、创建和使用
-    @Test
+    /*@Test
     public void test_SqlSessionFactory() throws IOException {
         // 1. 从SqlSessionFactory中获取SqlSession
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
@@ -112,10 +99,10 @@ public class ApiTest {
         Object[] req = {1L};
         Object res = sqlSession.selectOne("cn.moongn.mybatis.test.dao.IUserDao.queryUserInfoById", req);
         logger.info("测试结果：{}", JSON.toJSONString(res));
-    }
+    }*/
 
     // 第五章：数据源池化技术实现
-    @Test
+    /*@Test
     public void testSqlSessionFactory() throws IOException {
         // 1. 从SqlSessionFactory中获取SqlSession
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
@@ -146,6 +133,19 @@ public class ApiTest {
             // 链接关闭，一直开启的是同一个链接；反之，循环开启的是不同的链接，在活跃链接数量达到上限后，会休眠一段时间，直到有空闲链接
             connection.close();
         }
+    }*/
+
+    // 第六章：SQL执行器的定义和实现
+    @Test
+    public void test_SqlSessionFactory() throws IOException {
+        // 1. 从SqlSessionFactory中获取SqlSession
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(Resources.getResourceAsReader("mybatis-config-datasource.xml"));
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        // 2. 获取映射器对象
+        IUserDao userDao = sqlSession.getMapper(IUserDao.class);
+        // 3. 测试验证
+        User user = userDao.queryUserInfoById(1L);
+        logger.info("测试结果：{}", JSON.toJSONString(user));
     }
 
 }
