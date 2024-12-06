@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  *
  * @author moongn
  * @description 有连接池的数据源
- * @date 2024/11/1
+ * @date 2024/12/4
  *
  */
 
@@ -199,7 +199,7 @@ public class PooledDataSource implements DataSource {
                     if (!realConn.getAutoCommit()) {
                         realConn.rollback();
                     }
-                    realConn.close();
+                    // realConn.close();
                 } catch (Exception ignore) {
 
                 }

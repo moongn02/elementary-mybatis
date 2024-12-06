@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  *
  * @author moongn
  * @description 无池化数据源实现
- * @date 2024/11/1
+ * @date 2024/12/4
  *
  */
 
@@ -42,6 +42,15 @@ public class UnpooledDataSource implements DataSource {
             Driver driver = drivers.nextElement();
             registeredDrivers.put(driver.getClass().getName(), driver);
         }
+    }
+
+    public UnpooledDataSource() {}
+
+    public UnpooledDataSource(String driver, String url, String username, String password) {
+        this.driver = driver;
+        this.url = url;
+        this.username = username;
+        this.password = password;
     }
 
     /**
